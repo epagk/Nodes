@@ -1,7 +1,18 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
+#include "agent.h"
+
 using namespace std;
+
+vector<Agent>	agents;
+
+void Agent::displayAgent()
+{
+    string gndr = (gender == true) ? "Male" : "Female";
+    cout << "Agent: " << id << "\n\tGender: " << gndr << "\n\tAge: " << age << "\n\tEmployment: " << employment << "\n\tExtroversion rate: " << extroversion << endl;
+}
 
 int binarySearch(vector<int> agents, int l, int r, int x) 
 { 
@@ -23,7 +34,41 @@ int binarySearch(vector<int> agents, int l, int r, int x)
     return l; 
 } 
 
-int main()
+// Set the features for each agent
+void set_data(vector<int> sorted)
+{
+	srand ( time(NULL) );
+
+	for (int i = 0; i < sorted.size(); ++i)
+	{
+		Agent ag;
+		ag.setID(sorted.at(i));
+		ag.setGender((rand() % 2 == 1) ? true : false);
+		ag.setAge(18 + ( rand() % ( 40 - 18 + 1 ) ));
+
+		int emp = ( rand() % ( 2  + 1 ) );
+		string employment;
+
+		switch (emp){
+			case 0:
+				ag.setEmployment("Student");
+    			break;
+    		case 1:
+    			ag.setEmployment("Employee");
+    			break;
+    		case 2:
+    			ag.setEmployment("Unemployed");
+    			break;
+		}
+
+		ag.setExtroversion(rand() % 10 + 1);
+
+		agents.push_back(ag);
+	}
+}
+
+// Record all nodes by ID. Sort them increasingly
+void read_data()
 {
 	vector<int> sorted;
 
@@ -51,8 +96,19 @@ int main()
 	{
 		cout << sorted.at(i) << ' ';
 	}
-	
+
 	cout << "\nNumber of nodes: " << sorted.size() << endl;
+	set_data(sorted);
+}
+
+int main()
+{
+	read_data();
+
+	for (auto it = agents.begin(); it != agents.end(); ++it)
+	{
+		(*it).displayAgent();
+	}
 
 	return 0;
 }

@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 
+using namespace std;
+
 class Agent
 {
 	private:
@@ -12,6 +14,7 @@ class Agent
 		int age;	             // age of agent
     string employment;     // employment of agent
 		float extroversion;		 // extroversion of agent
+    vector<Agent> neighbors;
 	
 	public:
 		Agent(int ID, bool g, int a, string e, float ext) { // Constructor with parameters
@@ -74,6 +77,11 @@ class Agent
     	float getExtroversion() {
       		return extroversion;
     	}
+
+      void addNeighbor(Agent a)
+      {
+        neighbors.push_back(a);
+      }
 
       void displayAgent();
 };
