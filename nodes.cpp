@@ -3,15 +3,19 @@
 #include <vector>
 #include <string>
 #include "agent.h"
+#include "agentGraph.h"
 
 using namespace std;
 
 vector<Agent>	agents;
+vector<pair<int, int>>	edges;
 
 void Agent::displayAgent()
 {
     string gndr = (gender == true) ? "Male" : "Female";
     cout << "Agent: " << id << "\n\tGender: " << gndr << "\n\tAge: " << age << "\n\tEmployment: " << employment << "\n\tExtroversion rate: " << extroversion << endl;
+    if (neighbors.empty()) { cout << "No neighbors found!\n"; }
+    else { cout << "He has neighbors\n"; }
 }
 
 int binarySearch(vector<int> agents, int l, int r, int x) 
@@ -90,7 +94,8 @@ void read_data()
 		{
 			auto it = sorted.insert(sorted.begin() + idx, b);
 		}
-	}
+
+		edges.push_back(make_pair(a,b));
 
 	for (int i = 0; i < sorted.size(); i++) 
 	{
@@ -101,14 +106,48 @@ void read_data()
 	set_data(sorted);
 }
 
+void set_edges()
+{
+	for (auto it = edges.begin(); it != edges.end(); ++it)
+	{
+		Agent a = getAgent(agents, (*it).first);
+		Agent b = getAgent(agents, (*it).second);
+		// a.addNeighbor(b);
+		// b.addNeighbor(a);
+	}
+}
+
 int main()
 {
 	read_data();
+	// set_edges();
 
-	for (auto it = agents.begin(); it != agents.end(); ++it)
+	for (auto it = edges.begin(); it != edges.end(); ++it)
 	{
-		(*it).displayAgent();
+		Agent a = getAgent(agents, (*it).first);
+		Agent b = getAgent(agents, (*it).second);
+		a.addNeighbor(b);
+		b.addNeighbor(a);
 	}
+
+	// for (auto it = agents.begin(); it != agents.end(); ++it)
+	// {
+	// 	(*it).displayAgent();
+	// }
+
+	Agent g0 = getAgent(agents, 345);
+
+	vector<Agent> v = g0.getNeighbors();
+
+	if (v.empty()) { cout << "empty list!\n"; }
+	else { cout << "Not empty list\n"; }
+	
+	for (auto it = v.begin(); it != v.end(); ++it)
+	{
+		cout << (*it).getID() << " ";
+	}
+
+	cout << endl;
 
 	return 0;
 }

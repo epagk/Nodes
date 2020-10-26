@@ -80,7 +80,13 @@ class Agent
 
       void addNeighbor(Agent a)
       {
+        cout << "in addNeighbor! Connect: " << id << " with: " << a.getID() << endl;
         neighbors.push_back(a);
+      }
+
+      vector<Agent> getNeighbors()
+      {
+        return neighbors;
       }
 
       void displayAgent();
