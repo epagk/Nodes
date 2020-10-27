@@ -7,7 +7,7 @@
 
 using namespace std;
 
-vector<Agent>	agents;
+vector<Agent> agents;
 vector<pair<int, int>>	edges;
 
 void Agent::displayAgent()
@@ -16,10 +16,7 @@ void Agent::displayAgent()
     cout << "Agent: " << id << "\n\tGender: " << gndr << "\n\tAge: " << age << "\n\tEmployment: " << employment << "\n\tExtroversion rate: " << extroversion << endl;
     if (neighbors.empty()) { cout << "No neighbors found!\n"; }
     else { 
-    	cout << "He has " << this->neighbors.size() << " neighbors\n";
-	    // for(int i =0;i<this->neighbors.size();i++){
-	    // 	cout << this->neighbors.at(i)->getID() << "\n";
-	    // } 
+    	cout << "\tNum of neighbors: " << this->neighbors.size() << endl;
 	}
 }
 
@@ -71,7 +68,6 @@ void set_data(vector<int> sorted)
 		}
 
 		ag.setExtroversion(rand() % 10 + 1);
-
 		agents.push_back(ag);
 	}
 }
@@ -103,77 +99,50 @@ void read_data()
 		edges.push_back(make_pair(a,b));
 	}
 
-	for (int i = 0; i < sorted.size(); i++) 
-	{
-		cout << sorted.at(i) << ' ';
-	}
+	// for (int i = 0; i < sorted.size(); i++) 
+	// {
+	// 	cout << sorted.at(i) << ' ';
+	// }
 
 	
-	cout << "\nNumber of nodes: " << sorted.size() << endl;
+	cout << "Number of nodes: " << sorted.size() << endl;
 	set_data(sorted);
 }
 
-// void set_edges()
-// {
-// 	for (auto it = edges.begin(); it != edges.end(); ++it)
-// 	{
-// 		Agent a = getAgent(agents, (*it).first);
-// 		Agent b = getAgent(agents, (*it).second);
-// 		a.addNeighbor(b);
-// 		b.addNeighbor(a);
-// 		// Agent *A = &a;
-// 		// Agent *B = &b;
-// 		// A->addNeighbor(b);
-// 		// B->addNeighbor(a);
-// 	}
-
-
-// }
+void set_edges()
+{
+	for (auto it = edges.begin(); it != edges.end(); ++it)
+	{
+		Agent* a = getAgent(&agents, it->first);
+		Agent* b = getAgent(&agents, it->second);
+		a->addNeighbor(b);
+	}
+}
 
 int main()
 {
 	read_data();
-	for (int i=0; i<edges.size();i++){
-		cout << edges.at(i).first << "\t" << edges.at(i).second << "\n";
-	}
-	// set_edges();
-	for (auto it = edges.begin(); it != edges.end(); ++it)
+	set_edges();
+
+
+	for (auto it = agents.begin(); it != agents.end(); ++it)
 	{
-		cout << it->first <<"\t" << it->second << "\n";
-		Agent* a = getAgent(&agents, it->first);
-		// assert(a->getID()!=-1);
-		Agent* b = getAgent(&agents, it->second);
-		// assert(b->getID()!=-1);
-		a->addNeighbor(b);
-		// cout <<a->neighbors.size() << "\n";
-		b->addNeighbor(a);
-		// cout <<b->neighbors.size() << "\n";
-		// Agent *A = &a;
-		// Agent *B = &b;
-		// A->addNeighbor(b);
-		// B->addNeighbor(a);
+		(*it).displayAgent();
 	}
 
-	// for (auto it = agents.begin(); it != agents.end(); ++it)
-	// {
-	// 	(*it).displayAgent();
+	// Agent* g0 = getAgent(&agents, 285);
+	// vector<Agent*> v = g0->getNeighbors();
+
+	// if (v.empty()) { cout << "empty list!\n"; }
+	// else { cout << "Not empty list\n"; }
+	// Agent* vi;
+	// for (auto it = v.begin(); it != v.end(); ++it)
+	// {	
+	// 	vi = *it;
+	// 	cout << vi->getID() << " ";
 	// }
 
-	Agent* g0 = getAgent(&agents, 345);
-	
-
-	vector<Agent*> v = g0->getNeighbors();
-
-	if (v.empty()) { cout << "empty list!\n"; }
-	else { cout << "Not empty list\n"; }
-	Agent* vi;
-	for (auto it = v.begin(); it != v.end(); ++it)
-	{	
-		vi = *it;
-		cout << vi->getID() << " ";
-	}
-
-	cout << endl;
+	// cout << endl;
 
 	return 0;
 }

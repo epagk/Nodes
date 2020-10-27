@@ -10,9 +10,8 @@ Agent* getAgent(vector<Agent>* agents, int ID)
 
 	for (unsigned n = 0; n < agents->size(); n++)
 	{	
-		it = &agents->at(n);
+		it = &(agents->at(n));
 		if (it->getID() == ID){
-			it->displayAgent();
 			return it;
 		}
 	}
