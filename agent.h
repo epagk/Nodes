@@ -14,7 +14,9 @@ class Agent
 		int age;	             // age of agent
     string employment;     // employment of agent
 		float extroversion;		 // extroversion of agent
-    vector<Agent> neighbors;
+
+  public:
+    vector<Agent*> neighbors;
 	
 	public:
 		Agent(int ID, bool g, int a, string e, float ext) { // Constructor with parameters
@@ -78,13 +80,14 @@ class Agent
       		return extroversion;
     	}
 
-      void addNeighbor(Agent a)
+      void addNeighbor(Agent* a)
       {
-        cout << "in addNeighbor! Connect: " << id << " with: " << a.getID() << endl;
+        
         neighbors.push_back(a);
+
       }
 
-      vector<Agent> getNeighbors()
+      vector<Agent*> getNeighbors()
       {
         return neighbors;
       }

@@ -15,7 +15,12 @@ void Agent::displayAgent()
     string gndr = (gender == true) ? "Male" : "Female";
     cout << "Agent: " << id << "\n\tGender: " << gndr << "\n\tAge: " << age << "\n\tEmployment: " << employment << "\n\tExtroversion rate: " << extroversion << endl;
     if (neighbors.empty()) { cout << "No neighbors found!\n"; }
-    else { cout << "He has neighbors\n"; }
+    else { 
+    	cout << "He has " << this->neighbors.size() << " neighbors\n";
+	    // for(int i =0;i<this->neighbors.size();i++){
+	    // 	cout << this->neighbors.at(i)->getID() << "\n";
+	    // } 
+	}
 }
 
 int binarySearch(vector<int> agents, int l, int r, int x) 
@@ -96,38 +101,57 @@ void read_data()
 		}
 
 		edges.push_back(make_pair(a,b));
+	}
 
 	for (int i = 0; i < sorted.size(); i++) 
 	{
 		cout << sorted.at(i) << ' ';
 	}
 
+	
 	cout << "\nNumber of nodes: " << sorted.size() << endl;
 	set_data(sorted);
 }
 
-void set_edges()
-{
-	for (auto it = edges.begin(); it != edges.end(); ++it)
-	{
-		Agent a = getAgent(agents, (*it).first);
-		Agent b = getAgent(agents, (*it).second);
-		// a.addNeighbor(b);
-		// b.addNeighbor(a);
-	}
-}
+// void set_edges()
+// {
+// 	for (auto it = edges.begin(); it != edges.end(); ++it)
+// 	{
+// 		Agent a = getAgent(agents, (*it).first);
+// 		Agent b = getAgent(agents, (*it).second);
+// 		a.addNeighbor(b);
+// 		b.addNeighbor(a);
+// 		// Agent *A = &a;
+// 		// Agent *B = &b;
+// 		// A->addNeighbor(b);
+// 		// B->addNeighbor(a);
+// 	}
+
+
+// }
 
 int main()
 {
 	read_data();
+	for (int i=0; i<edges.size();i++){
+		cout << edges.at(i).first << "\t" << edges.at(i).second << "\n";
+	}
 	// set_edges();
-
 	for (auto it = edges.begin(); it != edges.end(); ++it)
 	{
-		Agent a = getAgent(agents, (*it).first);
-		Agent b = getAgent(agents, (*it).second);
-		a.addNeighbor(b);
-		b.addNeighbor(a);
+		cout << it->first <<"\t" << it->second << "\n";
+		Agent* a = getAgent(&agents, it->first);
+		// assert(a->getID()!=-1);
+		Agent* b = getAgent(&agents, it->second);
+		// assert(b->getID()!=-1);
+		a->addNeighbor(b);
+		// cout <<a->neighbors.size() << "\n";
+		b->addNeighbor(a);
+		// cout <<b->neighbors.size() << "\n";
+		// Agent *A = &a;
+		// Agent *B = &b;
+		// A->addNeighbor(b);
+		// B->addNeighbor(a);
 	}
 
 	// for (auto it = agents.begin(); it != agents.end(); ++it)
@@ -135,16 +159,18 @@ int main()
 	// 	(*it).displayAgent();
 	// }
 
-	Agent g0 = getAgent(agents, 345);
+	Agent* g0 = getAgent(&agents, 345);
+	
 
-	vector<Agent> v = g0.getNeighbors();
+	vector<Agent*> v = g0->getNeighbors();
 
 	if (v.empty()) { cout << "empty list!\n"; }
 	else { cout << "Not empty list\n"; }
-	
+	Agent* vi;
 	for (auto it = v.begin(); it != v.end(); ++it)
-	{
-		cout << (*it).getID() << " ";
+	{	
+		vi = *it;
+		cout << vi->getID() << " ";
 	}
 
 	cout << endl;

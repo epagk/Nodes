@@ -4,14 +4,21 @@
 
 using namespace std;
 
-Agent getAgent(vector<Agent> agents, int ID)
-{
-	for (auto it = agents.begin(); it!=agents.end(); it++)
-	{
-		if ((*it).getID() == ID)
-			return (*it);
+Agent* getAgent(vector<Agent>* agents, int ID)
+{	
+	Agent* it;
+
+	for (unsigned n = 0; n < agents->size(); n++)
+	{	
+		it = &agents->at(n);
+		if (it->getID() == ID){
+			it->displayAgent();
+			return it;
+		}
 	}
 
 	Agent ag(-1, true, -1, "ghost", -1);		// if given ID does not exist
-	return ag;
+	Agent *ag_r = &ag;
+	
+	return ag_r;
 }
