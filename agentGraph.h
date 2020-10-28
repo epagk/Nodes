@@ -1,11 +1,14 @@
 #include <iostream>
 #include <bits/stdc++.h> 
 #include "agent.h" // header in local directory
+#include <list>
+#include <algorithm>
 
 using namespace std;
 
 extern vector<Agent> agents;
 extern vector<pair<int, int>>	edges;
+extern vector<Agent> agentsFinal;
 
 Agent* getAgent(vector<Agent> &agents, int ID)
 {	
@@ -95,6 +98,65 @@ void set_data(vector<int> sorted)
 	}
 }
 
+// Connect the Agents
+void set_edges()
+{
+	for (auto it = edges.begin(); it != edges.end(); ++it)
+	{
+		Agent* a = getAgent(agents, it->first);
+		Agent* b = getAgent(agents, it->second);
+		a->addNeighbor(b);
+	}
+}
+
+void BFS(int max) 
+{ 
+    srand ( time(NULL) );
+    int count = 1;
+
+	// Mark all the vertices as not visited 
+    list<int> visited; 
+  
+    // Create a queue for BFS 
+    list<Agent> queue; 
+  
+  	// Pick randomly an agent
+    // Mark the current node as visited and enqueue it 
+    int randomIndex = rand() % agents.size();
+    Agent s = agents.at(randomIndex);
+    cout << "randomly picked: " << s.getID() << endl;
+
+    visited.push_back(s.getID());
+    queue.push_back(s); 
+    agentsFinal.push_back(s);
+  
+    while(!queue.empty()) 
+    { 
+        // Dequeue a vertex from queue and print it 
+        s = queue.front(); 
+        // cout << s.getID() << " ";
+        queue.pop_front(); 
+  
+        // Get all adjacent vertices of the dequeued 
+        // vertex s. If a adjacent has not been visited,  
+        // then mark it visited and enqueue it 
+        Agent* n;
+		for (unsigned i = 0; i < s.getNeighbors().size(); ++i)
+		{
+			n = s.getNeighbors().at(i);
+			if (find(visited.begin(), visited.end(), n->getID()) != visited.end() == 0 )
+			{
+				visited.push_back(n->getID());
+				queue.push_back(*n);
+				agentsFinal.push_back(*n);
+				count++;
+			}
+			if ( count == max ) break;
+		} 
+		if ( count == max ) break;
+    } 
+} 
+
 // Record all nodes by ID. Sort them increasingly
 void read_data()
 {
@@ -129,15 +191,15 @@ void read_data()
 
 	
 	cout << "Number of nodes: " << sorted.size() << endl;
-	set_data(sorted);
-}
+	// set_data(sorted);
 
-void set_edges()
-{
-	for (auto it = edges.begin(); it != edges.end(); ++it)
+	Agent ag;
+	for (int i = 0; i < sorted.size(); ++i)
 	{
-		Agent* a = getAgent(agents, it->first);
-		Agent* b = getAgent(agents, it->second);
-		a->addNeighbor(b);
+		ag.setID(sorted.at(i));
+		agents.push_back(ag);
 	}
+
+	set_edges();
+	BFS(100);
 }
