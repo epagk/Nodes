@@ -14,8 +14,6 @@ class Agent
 		int age;	             // age of agent
     string employment;     // employment of agent
 		float extroversion;		 // extroversion of agent
-
-  public:
     vector<Agent*> neighbors;
 	
 	public:
