@@ -6,17 +6,17 @@
 
 using namespace std;
 
-extern vector<Agent> agents;
+vector<Agent> nodes;
 extern vector<pair<int, int>>	edges;
-extern vector<Agent> agentsFinal;
+extern vector<Agent> agents;
 
-Agent* getAgent(vector<Agent> &agents, int ID)
+Agent* getAgent(vector<Agent> &v, int ID)
 {	
 	Agent* it;
 
-	for (unsigned n = 0; n < agents.size(); n++)
+	for (unsigned n = 0; n < v.size(); n++)
 	{	
-		it = &(agents.at(n));
+		it = &(v.at(n));
 		if (it->getID() == ID){
 			return it;
 		}
@@ -46,19 +46,19 @@ void Agent::displayAgent()
 	// cout << endl;
 }
 
-int binarySearch(vector<int> agents, int l, int r, int x) 
+int binarySearch(vector<int> v, int l, int r, int x) 
 { 
     if (r >= l) 
     { 
         int mid = l + (r - l) / 2; 
   
-        if (agents[mid] == x) // We don't want to insert 
+        if (v[mid] == x) // We don't want to insert 
             return -1;		  // an element that already exists
   
-        if (agents[mid] > x) 
-            return binarySearch(agents, l, mid - 1, x); 
+        if (v[mid] > x) 
+            return binarySearch(v, l, mid - 1, x); 
   
-        return binarySearch(agents, mid + 1, r, x); 
+        return binarySearch(v, mid + 1, r, x); 
     } 
 
     //if element not present
@@ -94,17 +94,17 @@ void set_data(vector<int> sorted)
 		}
 
 		ag.setExtroversion(rand() % 10 + 1);
-		agents.push_back(ag);
+		nodes.push_back(ag);
 	}
 }
 
-// Connect the Agents
+// Connect the nodes
 void set_edges()
 {
 	for (auto it = edges.begin(); it != edges.end(); ++it)
 	{
-		Agent* a = getAgent(agents, it->first);
-		Agent* b = getAgent(agents, it->second);
+		Agent* a = getAgent(nodes, it->first);
+		Agent* b = getAgent(nodes, it->second);
 		a->addNeighbor(b);
 	}
 }
@@ -122,13 +122,13 @@ void BFS(int max)
   
   	// Pick randomly an agent
     // Mark the current node as visited and enqueue it 
-    int randomIndex = rand() % agents.size();
-    Agent s = agents.at(randomIndex);
+    int randomIndex = rand() % nodes.size();
+    Agent s = nodes.at(randomIndex);
     cout << "randomly picked: " << s.getID() << endl;
 
     visited.push_back(s.getID());
     queue.push_back(s); 
-    agentsFinal.push_back(s);
+    agents.push_back(s);
   
     while(!queue.empty()) 
     { 
@@ -148,7 +148,7 @@ void BFS(int max)
 			{
 				visited.push_back(n->getID());
 				queue.push_back(*n);
-				agentsFinal.push_back(*n);
+				agents.push_back(*n);
 				count++;
 			}
 			if ( count == max ) break;
@@ -158,11 +158,11 @@ void BFS(int max)
 } 
 
 // Record all nodes by ID. Sort them increasingly
-void read_data()
+void read_data(int max)
 {
 	vector<int> sorted;
 
-	ifstream infile("0.edges");
+	ifstream infile("107.edges");
 
 	int a, b;
 	while (infile >> a >> b)
@@ -197,9 +197,9 @@ void read_data()
 	for (int i = 0; i < sorted.size(); ++i)
 	{
 		ag.setID(sorted.at(i));
-		agents.push_back(ag);
+		nodes.push_back(ag);
 	}
 
 	set_edges();
-	BFS(100);
+	BFS(max);
 }

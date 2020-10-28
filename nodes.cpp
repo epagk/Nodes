@@ -9,20 +9,16 @@ using namespace std;
 
 vector<Agent> agents;
 vector<pair<int, int>>	edges;
-vector<Agent> agentsFinal;
 
-int main()
+int main(int argc, char *argv[])
 {
-	
-	read_data();	// Read Data
-	// set_edges();	// Construct the Graph
+	read_data(atoi(argv[1]));	// Read Data - Construct Graph of agents
 
-
-	for (auto it = agentsFinal.begin(); it != agentsFinal.end(); ++it)
+	for (auto it = agents.begin(); it != agents.end(); ++it)
 	{
 		(*it).displayAgent();
 	}
-	cout << agentsFinal.size() << endl;
+	cout << agents.size() << endl;
 
 	// Agent* g0 = getAgent(&agents, 285);
 	// vector<Agent*> v = g0->getNeighbors();
