@@ -24,23 +24,19 @@ int main(int argc, char *argv[])
 	{
 		(*it).displayAgent();
 	}
-	cout << agents.size() << endl;
 
-	cout << connected_nodes(288,316) << endl;
+	// int rand1 = rand() % agents.size();
+ 	// 	Agent g0 = agents.at(rand1);
+ 	// 	cout << "Randomly picked: " << g0.getID() << endl;
 
-	// Agent* g0 = getAgent(&agents, 285);
-	// vector<Agent*> v = g0->getNeighbors();
+	// vector<Agent*> v = g0.getNeighbors();
 
-	// if (v.empty()) { cout << "empty list!\n"; }
-	// else { cout << "Not empty list\n"; }
-	// Agent* vi;
 	// for (auto it = v.begin(); it != v.end(); ++it)
 	// {	
-	// 	vi = *it;
-	// 	cout << vi->getID() << " ";
+	// 	cout << (*it)->getID() << " ";
 	// }
 
-	// cout << endl;
+	cout << endl;
 
 	return 0;
 }

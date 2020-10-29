@@ -47,17 +47,17 @@ void Agent::displayAgent()
     string gndr = (gender == true) ? "Male" : "Female";
     cout << "Agent: " << id << "\n\tGender: " << gndr << "\n\tAge: " << age << "\n\tEmployment: " << employment << "\n\tExtroversion rate: " << extroversion << endl;
     
-    // if (neighbors.empty()) { cout << "No neighbors found!\n"; }
-    // else {  cout << "\tNum of neighbors: " << this->neighbors.size() << endl; }
+    if (neighbors.empty()) { cout << "No neighbors found!\n"; }
+    else {  cout << "\tNum of neighbors: " << this->neighbors.size() << endl; }
 	
-	cout << "Neighbors: ";
-	Agent* n;
-	for (unsigned i = 0; i < neighbors.size(); ++i)
-	{
-		n = neighbors.at(i);
-		cout << n->getID() << " ";
-	}
-	cout << endl;
+	// cout << "Neighbors: ";
+	// Agent* n;
+	// for (unsigned i = 0; i < neighbors.size(); ++i)
+	// {
+	// 	n = neighbors.at(i);
+	// 	cout << n->getID() << " ";
+	// }
+	// cout << endl;
 }
 
 int binarySearch(vector<int> v, int l, int r, int x) 
