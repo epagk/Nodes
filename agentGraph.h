@@ -9,6 +9,8 @@ using namespace std;
 vector<Agent> nodes;
 vector<pair<int, int>>	edges;
 extern vector<Agent> agents;
+extern float drivePercentage;
+extern int agentsNum;
 
 Agent* getAgent(vector<Agent> &v, int ID)
 {	
@@ -22,7 +24,7 @@ Agent* getAgent(vector<Agent> &v, int ID)
 		}
 	}
 
-	Agent ag(-1, true, -1, "ghost", -1);		// if given ID does not exist
+	Agent ag(-1, false, true, -1, "ghost", -1);		// if given ID does not exist
 	Agent *ag_r = &ag;
 	
 	return ag_r;
@@ -45,20 +47,22 @@ bool connected_nodes(int a, int b)
 void Agent::displayAgent()
 {
     string gndr = (gender == true) ? "Male" : "Female";
-    cout << "Agent: " << id << "\n\tGender: " << gndr << "\n\tAge: " << age << "\n\tEmployment: " << employment << "\n\tExtroversion rate: " << extroversion << endl;
+    string role = (driver == true) ? "Driver" : "Passenger";
+    cout << "Agent: " << id << " " << role << "\n\tGender: " << gndr << "\n\tAge: " << age << "\n\tEmployment: " << 
+    employment << "\n\tExtroversion rate: " << extroversion << endl;
     
-    // if (neighbors.empty()) { cout << "No neighbors found!\n"; }
-    // else {  cout << "\tNum of neighbors: " << this->neighbors.size() << endl; }
+    if (neighbors.empty()) { cout << "No neighbors found!\n"; }
+    else {  cout << "\tNum of neighbors: " << this->neighbors.size() << endl; }
 	
-	cout << "\tNeighbors: " << endl;
-	Agent* n;
-	float w;
-	for (unsigned i = 0; i < neighbors.size(); ++i)
-	{
-		n = neighbors.at(i).first;
-		w = neighbors.at(i).second;
-		cout << "\t(" << n->getID() << "," << w << ")";
-	}
+	// cout << "\tNeighbors: " << endl;
+	// Agent* n;
+	// float w;
+	// for (unsigned i = 0; i < neighbors.size(); ++i)
+	// {
+	// 	n = neighbors.at(i).first;
+	// 	w = neighbors.at(i).second;
+	// 	cout << "\t(" << n->getID() << "," << w << ")";
+	// }
 	cout << endl;
 }
 
@@ -87,8 +91,44 @@ void set_data()
 {
 	srand ( time(NULL) );
 
+	drivePercentage /= 100;
+	int driversNum = ceil(drivePercentage*agentsNum);	// Number of Drivers
+
+	vector<int> drivers;	// IDs of drivers
+	vector<int> indexes;
+	for (int i = 0; i < agents.size(); ++i)
+	{
+		indexes.push_back(i);
+	}
+	random_shuffle(indexes.begin(), indexes.end()); // randomly shuffle indexes
+
+	// Pick first (driverNum) random indexes
+	// The IDs in vector drivers are sorted!
+	for (int i = 0; i < driversNum; ++i)
+	{
+		int val = agents.at(indexes.at(i)).getID();
+		int idx = binarySearch(drivers, 0, drivers.size()-1, val);
+		drivers.insert(drivers.begin() + idx, val);
+	}
+
+	cout << "IDs of drivers: " << endl;
+	for (int i = 0; i < drivers.size(); ++i)
+	{
+		cout << drivers.at(i) << " ";
+	}
+	cout << endl;
+
 	for (auto it = agents.begin(); it != agents.end(); ++it)
 	{
+		if ( count(drivers.begin(), drivers.end(), (*it).getID()) )		// Agent belons in Driver's set
+		{
+			(*it).setDriver(true);
+		}
+		else
+		{
+			(*it).setDriver(false);
+		}
+
 		(*it).setGender((rand() % 2 == 1) ? true : false);
 		(*it).setAge(18 + ( rand() % ( 40 - 18 + 1 ) ));
 
@@ -109,6 +149,7 @@ void set_data()
 
 		(*it).setExtroversion(rand() % 10 + 1);
 	}
+
 }
 
 // Connect the nodes
@@ -122,7 +163,7 @@ void set_edges()
 	}
 }
 
-void BFS(int max) 
+void BFS() 
 { 
     srand ( time(NULL) );
     int count = 1;
@@ -163,14 +204,14 @@ void BFS(int max)
 				agents.push_back(*n);
 				count++;
 			}
-			if ( count == max ) break;
+			if ( count == agentsNum ) break;
 		} 
-		if ( count == max ) break;
+		if ( count == agentsNum ) break;
     } 
 } 
 
 // Record all nodes by ID. Sort them increasingly
-void read_data(int max)
+void read_data()
 {
 	vector<int> sorted;
 
@@ -213,6 +254,6 @@ void read_data(int max)
 	}
 
 	set_edges();	// set connections between nodes
-	BFS(max);		// reduce agents to number asked
+	BFS();		// reduce agents to number asked
 	set_data();		// give features to agents
 }

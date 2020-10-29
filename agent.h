@@ -10,6 +10,7 @@ class Agent
 {
 	private:
 		int id;			           // Identifier of agent
+    bool driver;           // True if driver or Flase otherwise
 		bool gender;	         // Male = True or Female = False
 		int age;	             // age of agent
     string employment;     // employment of agent
@@ -17,8 +18,9 @@ class Agent
     vector<pair<Agent*, float>> neighbors;  // neighbor + weight
 	
 	public:
-		Agent(int ID, bool g, int a, string e, float ext) { // Constructor with parameters
+		Agent(int ID, bool d, bool g, int a, string e, float ext) { // Constructor with parameters
 		  id = ID;
+      driver = d;
 	    gender = g;
       age = a;
 	    employment = e;
@@ -37,6 +39,16 @@ class Agent
     	int getID() {
       		return id;
     	}
+
+      //Setter
+      void setDriver(bool d){
+          driver = d;
+      }
+
+      // Getter
+      bool getDriver(){
+          return driver;
+      }
 
     	// Setter
     	void setGender(bool g) {

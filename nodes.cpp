@@ -8,17 +8,27 @@
 using namespace std;
 
 vector<Agent> agents;
-// vector<pair<int, int>>	edges;
+float drivePercentage;
+int agentsNum;
 
 int main(int argc, char *argv[])
 {
-	// argv[1]: # of agents
+	if (argc < 3)
+	{
+		cout << "Some arguments are missing!" << endl;
+		return 0;
+	}
+
+	// argv[1]: # of agents - participants
+	// argv[2]: percentage of drivers
+	agentsNum = atoi(argv[1]);
+	drivePercentage = atoi(argv[2]);
 
 	// Read Data - Construct Graph of agents
 	// in header file agentGraph.h we construct
 	// the vector of participant-agents with
 	// all the information needed
-	read_data(atoi(argv[1]));	// in agentGraph.h
+	read_data();	// in agentGraph.h
 
 	for (auto it = agents.begin(); it != agents.end(); ++it)
 	{
