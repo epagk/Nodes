@@ -47,17 +47,19 @@ void Agent::displayAgent()
     string gndr = (gender == true) ? "Male" : "Female";
     cout << "Agent: " << id << "\n\tGender: " << gndr << "\n\tAge: " << age << "\n\tEmployment: " << employment << "\n\tExtroversion rate: " << extroversion << endl;
     
-    if (neighbors.empty()) { cout << "No neighbors found!\n"; }
-    else {  cout << "\tNum of neighbors: " << this->neighbors.size() << endl; }
+    // if (neighbors.empty()) { cout << "No neighbors found!\n"; }
+    // else {  cout << "\tNum of neighbors: " << this->neighbors.size() << endl; }
 	
-	// cout << "Neighbors: ";
-	// Agent* n;
-	// for (unsigned i = 0; i < neighbors.size(); ++i)
-	// {
-	// 	n = neighbors.at(i);
-	// 	cout << n->getID() << " ";
-	// }
-	// cout << endl;
+	cout << "\tNeighbors: " << endl;
+	Agent* n;
+	float w;
+	for (unsigned i = 0; i < neighbors.size(); ++i)
+	{
+		n = neighbors.at(i).first;
+		w = neighbors.at(i).second;
+		cout << "\t(" << n->getID() << "," << w << ")";
+	}
+	cout << endl;
 }
 
 int binarySearch(vector<int> v, int l, int r, int x) 
@@ -116,7 +118,7 @@ void set_edges()
 	{
 		Agent* a = getAgent(nodes, it->first);
 		Agent* b = getAgent(nodes, it->second);
-		a->addNeighbor(b);
+		a->addNeighbor(b, 0);
 	}
 }
 
@@ -145,7 +147,6 @@ void BFS(int max)
     { 
         // Dequeue a vertex from queue and print it 
         s = queue.front(); 
-        // cout << s.getID() << " ";
         queue.pop_front(); 
   
         // Get all adjacent vertices of the dequeued 
@@ -154,7 +155,7 @@ void BFS(int max)
         Agent* n;
 		for (unsigned i = 0; i < s.getNeighbors().size(); ++i)
 		{
-			n = s.getNeighbors().at(i);
+			n = s.getNeighbors().at(i).first;
 			if (find(visited.begin(), visited.end(), n->getID()) != visited.end() == 0 )
 			{
 				visited.push_back(n->getID());

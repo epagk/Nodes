@@ -14,7 +14,7 @@ class Agent
 		int age;	             // age of agent
     string employment;     // employment of agent
 		float extroversion;		 // extroversion of agent
-    vector<Agent*> neighbors;
+    vector<pair<Agent*, float>> neighbors;  // neighbor + weight
 	
 	public:
 		Agent(int ID, bool g, int a, string e, float ext) { // Constructor with parameters
@@ -78,14 +78,13 @@ class Agent
       		return extroversion;
     	}
 
-      void addNeighbor(Agent* a)
+      void addNeighbor(Agent* a, float weight)
       {
-        
-        neighbors.push_back(a);
-
+        pair<Agent*, float> n = make_pair(a, weight);
+        neighbors.push_back(n);
       }
 
-      vector<Agent*> getNeighbors()
+      vector<pair<Agent*, float>> getNeighbors()
       {
         return neighbors;
       }
