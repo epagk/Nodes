@@ -7,7 +7,7 @@
 using namespace std;
 
 vector<Agent> nodes;
-extern vector<pair<int, int>>	edges;
+vector<pair<int, int>>	edges;
 extern vector<Agent> agents;
 
 Agent* getAgent(vector<Agent> &v, int ID)
@@ -28,22 +28,36 @@ Agent* getAgent(vector<Agent> &v, int ID)
 	return ag_r;
 }
 
+// True if nodes with IDs a and b are connectes
+// False otherwise
+bool connected_nodes(int a, int b)
+{
+	for (int i = 0; i < edges.size(); ++i)
+	{
+		pair<int, int> edge = edges.at(i);
+		if ( edge.first == a && edge.second == b ) { return true; }
+		if ( edge.first == b && edge.second == a ) { return true; }
+	}
+
+	return false;
+}
+
 void Agent::displayAgent()
 {
     string gndr = (gender == true) ? "Male" : "Female";
     cout << "Agent: " << id << "\n\tGender: " << gndr << "\n\tAge: " << age << "\n\tEmployment: " << employment << "\n\tExtroversion rate: " << extroversion << endl;
     
-    if (neighbors.empty()) { cout << "No neighbors found!\n"; }
-    else {  cout << "\tNum of neighbors: " << this->neighbors.size() << endl; }
+    // if (neighbors.empty()) { cout << "No neighbors found!\n"; }
+    // else {  cout << "\tNum of neighbors: " << this->neighbors.size() << endl; }
 	
-	// cout << "Neighbors: ";
-	// Agent* n;
-	// for (unsigned i = 0; i < neighbors.size(); ++i)
-	// {
-	// 	n = neighbors.at(i);
-	// 	cout << n->getID() << " ";
-	// }
-	// cout << endl;
+	cout << "Neighbors: ";
+	Agent* n;
+	for (unsigned i = 0; i < neighbors.size(); ++i)
+	{
+		n = neighbors.at(i);
+		cout << n->getID() << " ";
+	}
+	cout << endl;
 }
 
 int binarySearch(vector<int> v, int l, int r, int x) 
@@ -67,34 +81,31 @@ int binarySearch(vector<int> v, int l, int r, int x)
 } 
 
 // Set the features for each agent
-void set_data(vector<int> sorted)
+void set_data()
 {
 	srand ( time(NULL) );
 
-	for (int i = 0; i < sorted.size(); ++i)
+	for (auto it = agents.begin(); it != agents.end(); ++it)
 	{
-		Agent ag;
-		ag.setID(sorted.at(i));
-		ag.setGender((rand() % 2 == 1) ? true : false);
-		ag.setAge(18 + ( rand() % ( 40 - 18 + 1 ) ));
+		(*it).setGender((rand() % 2 == 1) ? true : false);
+		(*it).setAge(18 + ( rand() % ( 40 - 18 + 1 ) ));
 
 		int emp = ( rand() % ( 2  + 1 ) );
 		string employment;
 
 		switch (emp){
 			case 0:
-				ag.setEmployment("Student");
+				(*it).setEmployment("Student");
     			break;
     		case 1:
-    			ag.setEmployment("Employee");
+    			(*it).setEmployment("Employee");
     			break;
     		case 2:
-    			ag.setEmployment("Unemployed");
+    			(*it).setEmployment("Unemployed");
     			break;
 		}
 
-		ag.setExtroversion(rand() % 10 + 1);
-		nodes.push_back(ag);
+		(*it).setExtroversion(rand() % 10 + 1);
 	}
 }
 
@@ -162,7 +173,7 @@ void read_data(int max)
 {
 	vector<int> sorted;
 
-	ifstream infile("107.edges");
+	ifstream infile("0.edges");
 
 	int a, b;
 	while (infile >> a >> b)
@@ -200,6 +211,7 @@ void read_data(int max)
 		nodes.push_back(ag);
 	}
 
-	set_edges();
-	BFS(max);
+	set_edges();	// set connections between nodes
+	BFS(max);		// reduce agents to number asked
+	set_data();		// give features to agents
 }

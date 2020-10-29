@@ -8,17 +8,25 @@
 using namespace std;
 
 vector<Agent> agents;
-vector<pair<int, int>>	edges;
+// vector<pair<int, int>>	edges;
 
 int main(int argc, char *argv[])
 {
-	read_data(atoi(argv[1]));	// Read Data - Construct Graph of agents
+	// argv[1]: # of agents
+
+	// Read Data - Construct Graph of agents
+	// in header file agentGraph.h we construct
+	// the vector of participant-agents with
+	// all the information needed
+	read_data(atoi(argv[1]));	// in agentGraph.h
 
 	for (auto it = agents.begin(); it != agents.end(); ++it)
 	{
 		(*it).displayAgent();
 	}
 	cout << agents.size() << endl;
+
+	cout << connected_nodes(288,316) << endl;
 
 	// Agent* g0 = getAgent(&agents, 285);
 	// vector<Agent*> v = g0->getNeighbors();
