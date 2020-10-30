@@ -215,7 +215,7 @@ void read_data()
 {
 	vector<int> sorted;
 
-	ifstream infile("0.edges");
+	ifstream infile("Facebook Graph/facebook/107.edges");
 
 	int a, b;
 	while (infile >> a >> b)
