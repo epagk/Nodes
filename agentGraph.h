@@ -61,9 +61,9 @@ void Agent::displayAgent()
 	// {
 	// 	n = neighbors.at(i).first;
 	// 	w = neighbors.at(i).second;
-	// 	cout << "\t(" << n->getID() << "," << w << ")";
+	// 	cout << "\t(" << n->getID() << "," << setprecision(2) << w << ")";
 	// }
-	cout << endl;
+	// cout << endl;
 }
 
 int binarySearch(vector<int> v, int l, int r, int x) 
@@ -111,13 +111,6 @@ void set_data()
 		drivers.insert(drivers.begin() + idx, val);
 	}
 
-	cout << "IDs of drivers: " << endl;
-	for (int i = 0; i < drivers.size(); ++i)
-	{
-		cout << drivers.at(i) << " ";
-	}
-	cout << endl;
-
 	for (auto it = agents.begin(); it != agents.end(); ++it)
 	{
 		if ( count(drivers.begin(), drivers.end(), (*it).getID()) )		// Agent belons in Driver's set
@@ -159,7 +152,7 @@ void set_edges()
 	{
 		Agent* a = getAgent(nodes, it->first);
 		Agent* b = getAgent(nodes, it->second);
-		a->addNeighbor(b, 0);
+		a->addNeighbor(b, ((double) rand() / (RAND_MAX)));	// random weight! Just for now!
 	}
 }
 
@@ -215,7 +208,7 @@ void read_data()
 {
 	vector<int> sorted;
 
-	ifstream infile("Facebook Graph/facebook/107.edges");
+	ifstream infile("Facebook Graph/facebook/1684.edges");
 
 	int a, b;
 	while (infile >> a >> b)

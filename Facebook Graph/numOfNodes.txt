@@ -1,0 +1,10 @@
+0.edges: 	333 nodes
+107.edges:  1034 nodes
+348.edges:  224 nodes
+414.edges:  150 nodes
+686.edges:  168 nodes
+698.edges:  61 nodes
+1684.edges: 786 nodes
+1912.edges: 747 nodes
+3437.edges: 534 nodes
+3980.edges: 52 nodes
