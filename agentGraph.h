@@ -114,13 +114,9 @@ void set_data()
 	for (auto it = agents.begin(); it != agents.end(); ++it)
 	{
 		if ( count(drivers.begin(), drivers.end(), (*it).getID()) )		// Agent belons in Driver's set
-		{
 			(*it).setDriver(true);
-		}
 		else
-		{
 			(*it).setDriver(false);
-		}
 
 		(*it).setGender((rand() % 2 == 1) ? true : false);
 		(*it).setAge(18 + ( rand() % ( 40 - 18 + 1 ) ));
@@ -229,15 +225,8 @@ void read_data()
 
 		edges.push_back(make_pair(a,b));
 	}
-
-	// for (int i = 0; i < sorted.size(); i++) 
-	// {
-	// 	cout << sorted.at(i) << ' ';
-	// }
-
 	
 	cout << "Number of nodes: " << sorted.size() << endl;
-	// set_data(sorted);
 
 	Agent ag;
 	for (int i = 0; i < sorted.size(); ++i)
