@@ -66,6 +66,37 @@ void Agent::displayAgent()
 	// cout << endl;
 }
 
+// Returns a file with enough number of nodes to satisfy 
+// user's requirement
+string randomFile()
+{
+	srand ( time(NULL) );
+
+	vector<pair<string, int>> files; 	// first -> files name, second -> # of nodes in that file
+	vector<int> indexes;
+
+	files.push_back(make_pair("0.edges", 333));
+	files.push_back(make_pair("107.edges", 1034));
+	files.push_back(make_pair("348.edges", 224));
+	files.push_back(make_pair("414.edges", 150));
+	files.push_back(make_pair("686.edges", 168));
+	files.push_back(make_pair("698.edges", 61));
+	files.push_back(make_pair("1684.edges", 786));
+	files.push_back(make_pair("1912.edges", 747));
+	files.push_back(make_pair("3437.edges", 534));
+	files.push_back(make_pair("3980.edges", 52));
+
+	for (int i = 0; i < files.size(); ++i)
+	{
+		pair<string, int> p = files.at(i);
+		if (p.second >= agentsNum)
+			indexes.push_back(i);
+	}
+
+	int r = rand() % indexes.size();
+	return files.at(indexes.at(r)).first;	// name of file
+}
+
 int binarySearch(vector<int> v, int l, int r, int x) 
 { 
     if (r >= l) 
@@ -167,7 +198,6 @@ void BFS()
     // Mark the current node as visited and enqueue it 
     int randomIndex = rand() % nodes.size();
     Agent s = nodes.at(randomIndex);
-    cout << "randomly picked: " << s.getID() << endl;
 
     visited.push_back(s.getID());
     queue.push_back(s); 
@@ -203,8 +233,9 @@ void BFS()
 void read_data()
 {
 	vector<int> sorted;
-
-	ifstream infile("Facebook Graph/facebook/1684.edges");
+	
+	string filename = "Facebook Graph/facebook/" + randomFile();
+	ifstream infile(filename);
 
 	int a, b;
 	while (infile >> a >> b)
@@ -225,8 +256,6 @@ void read_data()
 
 		edges.push_back(make_pair(a,b));
 	}
-	
-	cout << "Number of nodes: " << sorted.size() << endl;
 
 	Agent ag;
 	for (int i = 0; i < sorted.size(); ++i)
@@ -236,6 +265,6 @@ void read_data()
 	}
 
 	set_edges();	// set connections between nodes
-	BFS();		// reduce agents to number asked
+	BFS();			// reduce agents to number asked
 	set_data();		// give features to agents
 }
