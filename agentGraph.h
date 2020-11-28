@@ -94,6 +94,7 @@ string randomFile()
 	}
 
 	int r = rand() % indexes.size();
+	cout << "File picked: " << files.at(indexes.at(r)).first << endl;
 	return files.at(indexes.at(r)).first;	// name of file
 }
 
@@ -127,10 +128,10 @@ void set_data()
 
 	vector<int> drivers;	// IDs of drivers
 	vector<int> indexes;
+
 	for (int i = 0; i < agents.size(); ++i)
-	{
 		indexes.push_back(i);
-	}
+
 	random_shuffle(indexes.begin(), indexes.end()); // randomly shuffle indexes
 
 	// Pick first (driverNum) random indexes
@@ -149,22 +150,47 @@ void set_data()
 		else
 			(*it).setDriver(false);
 
-		(*it).setGender((rand() % 2 == 1) ? true : false);
-		(*it).setAge(18 + ( rand() % ( 40 - 18 + 1 ) ));
+		(*it).setGender((rand() % 2 == 1) ? true : false);	// Participant's Gender
 
-		int emp = ( rand() % ( 2  + 1 ) );
-		string employment;
+		int age = 18 + ( rand() % ( 40 - 18 + 1 ) );	// Participant's Age
+		(*it).setAge(age);
 
-		switch (emp){
-			case 0:
-				(*it).setEmployment("Student");
-    			break;
-    		case 1:
-    			(*it).setEmployment("Employee");
-    			break;
-    		case 2:
-    			(*it).setEmployment("Unemployed");
-    			break;
+		float p = ((double) rand() / (RAND_MAX));	// Πrobability
+
+		if (age >= 18 && age <= 25)	// Aged 18-25
+		{
+			if (p <= 0.8)
+				(*it).setEmployment("Student");		// Probability 0.8
+
+			if (p > 0.8 && p <= 0.9)
+				(*it).setEmployment("Employee");	// Probability 0.1
+			
+			if (p > 0.9)
+				(*it).setEmployment("Unemployed");	// Probability 0.1
+		}
+
+		if (age >= 26 && age <=30)	// Aged 26-30
+		{
+			if (p <= 0.25)
+				(*it).setEmployment("Student");		// Probability 0.25
+
+			if (p > 0.25 && p <= 0.5)
+				(*it).setEmployment("Employee");	// Probability 0.25
+			
+			if (p > 0.5)
+				(*it).setEmployment("Unemployed");	// Probability 0.5
+		}
+
+		if (age >= 31)	// Aged 31-40
+		{
+			if (p <= 0.1)
+				(*it).setEmployment("Student");		// Probability 0.1
+
+			if (p > 0.1 && p <= 0.3)
+				(*it).setEmployment("Unemployed");	// Probability 0.2
+			
+			if (p > 0.3)
+				(*it).setEmployment("Employee");	// Probability 0.7
 		}
 
 		(*it).setExtroversion(rand() % 10 + 1);
@@ -172,17 +198,22 @@ void set_data()
 
 }
 
-// Connect the nodes
+// Connect the nodes. Set new neighbor for each node
 void set_edges()
 {
 	for (auto it = edges.begin(); it != edges.end(); ++it)
 	{
 		Agent* a = getAgent(nodes, it->first);
 		Agent* b = getAgent(nodes, it->second);
+
+		// Pair (a,b) 
 		a->addNeighbor(b, ((double) rand() / (RAND_MAX)));	// random weight! Just for now!
+
+		// Pair (b,a) is a different edge for now. This is why we don't match symmetrically b->a 
 	}
 }
 
+// Use BFS in order to pick a random subgraph with the number of nodes asked by user
 void BFS() 
 { 
     srand ( time(NULL) );
@@ -234,24 +265,24 @@ void read_data()
 {
 	vector<int> sorted;
 	
-	string filename = "Facebook Graph/facebook/" + randomFile();
+	string filename = "Facebook Graph/facebook/" + randomFile();	// Pick a graph of a random file
 	ifstream infile(filename);
 
 	int a, b;
-	while (infile >> a >> b)
+	while (infile >> a >> b)	// a,b are connected nodes (neighbors)
 	{
 		int idx;
 
 		idx = binarySearch(sorted, 0, sorted.size()-1, a);
 		if (idx != -1)	// element Does not exists
 		{
-			auto it = sorted.insert(sorted.begin() + idx, a);
+			auto it = sorted.insert(sorted.begin() + idx, a);	// insert new node in vector
 		}
 
 		idx = binarySearch(sorted, 0, sorted.size()-1, b);
 		if (idx != -1)	// element Does not exists
 		{
-			auto it = sorted.insert(sorted.begin() + idx, b);
+			auto it = sorted.insert(sorted.begin() + idx, b);	// insert new node in vector
 		}
 
 		edges.push_back(make_pair(a,b));
