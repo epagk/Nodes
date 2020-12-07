@@ -36,6 +36,5 @@ int main(int argc, char *argv[])
 	cout << endl;
 
 	cout << "Agents # : " << agents.size() << endl;
-
 	return 0;
 }

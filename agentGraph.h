@@ -53,6 +53,8 @@ void Agent::displayAgent()
     
     if (neighbors.empty()) { cout << "No neighbors found!\n"; }
     else {  cout << "\tNum of neighbors: " << this->neighbors.size() << endl; }
+
+	cout << endl;
 	
 	// cout << "\tNeighbors: " << endl;
 	// Agent* n;
@@ -66,6 +68,7 @@ void Agent::displayAgent()
 	// cout << endl;
 }
 
+
 // Returns a file with enough number of nodes to satisfy 
 // user's requirement
 string randomFile()
@@ -75,7 +78,7 @@ string randomFile()
 	vector<pair<string, int>> files; 	// first -> files name, second -> # of nodes in that file
 	vector<int> indexes;
 
-	files.push_back(make_pair("0.edges", 333));
+	files.push_back(make_pair("0.edges", 333));		// name of file - # of nodes
 	files.push_back(make_pair("107.edges", 1034));
 	files.push_back(make_pair("348.edges", 224));
 	files.push_back(make_pair("414.edges", 150));
@@ -94,7 +97,6 @@ string randomFile()
 	}
 
 	int r = rand() % indexes.size();
-	cout << "File picked: " << files.at(indexes.at(r)).first << endl;
 	return files.at(indexes.at(r)).first;	// name of file
 }
 
@@ -265,37 +267,45 @@ void read_data()
 {
 	vector<int> sorted;
 	
-	string filename = "Facebook Graph/facebook/" + randomFile();	// Pick a graph of a random file
-	ifstream infile(filename);
+	// do while is used in case that user's request for number of agents it's not satisfied
+	// due to BFS failure. 
+	do{
+		sorted.clear();
+		nodes.clear();
+		agents.clear();
+		edges.clear();
 
-	int a, b;
-	while (infile >> a >> b)	// a,b are connected nodes (neighbors)
-	{
-		int idx;
+		string filename = "Facebook Graph/facebook/" + randomFile();	// Pick a graph of a random file
+		ifstream infile(filename);
 
-		idx = binarySearch(sorted, 0, sorted.size()-1, a);
-		if (idx != -1)	// element Does not exists
+		int a, b;
+		while (infile >> a >> b)	// a,b are connected nodes (neighbors)
 		{
-			auto it = sorted.insert(sorted.begin() + idx, a);	// insert new node in vector
+			int idx;
+
+			idx = binarySearch(sorted, 0, sorted.size()-1, a);	// Search for a
+
+			if (idx != -1)	// element Does not exists
+				auto it = sorted.insert(sorted.begin() + idx, a);	// insert new node in vector
+
+			idx = binarySearch(sorted, 0, sorted.size()-1, b);	// Search for b
+
+			if (idx != -1)	// element Does not exists
+				auto it = sorted.insert(sorted.begin() + idx, b);	// insert new node in vector
+
+			edges.push_back(make_pair(a,b));
 		}
 
-		idx = binarySearch(sorted, 0, sorted.size()-1, b);
-		if (idx != -1)	// element Does not exists
+		Agent ag;
+		for (int i = 0; i < sorted.size(); ++i)
 		{
-			auto it = sorted.insert(sorted.begin() + idx, b);	// insert new node in vector
+			ag.setID(sorted.at(i));
+			nodes.push_back(ag);
 		}
 
-		edges.push_back(make_pair(a,b));
-	}
+		set_edges();	// set connections between nodes
+		BFS();			// reduce agents to number asked
+	}while(agents.size() != agentsNum);
 
-	Agent ag;
-	for (int i = 0; i < sorted.size(); ++i)
-	{
-		ag.setID(sorted.at(i));
-		nodes.push_back(ag);
-	}
-
-	set_edges();	// set connections between nodes
-	BFS();			// reduce agents to number asked
 	set_data();		// give features to agents
 }

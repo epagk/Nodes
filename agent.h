@@ -18,7 +18,8 @@ class Agent
     vector<pair<Agent*, float>> neighbors;  // neighbor + weight
 	
 	public:
-		Agent(int ID, bool d, bool g, int a, string e, float ext) { // Constructor with parameters
+		Agent(int ID, bool d, bool g, int a, string e, float ext) // Constructor with parameters
+    {
 		  id = ID;
       driver = d;
 	    gender = g;
